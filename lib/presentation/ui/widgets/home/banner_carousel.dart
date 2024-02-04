@@ -2,16 +2,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class ImageCarousel extends StatefulWidget {
-  const ImageCarousel({super.key, this.height});
+class BannerCarousel extends StatefulWidget {
+  const BannerCarousel({super.key, this.height});
 
   final double? height;
 
   @override
-  State<ImageCarousel> createState() => _ImageCarouselState();
+  State<BannerCarousel> createState() => _BannerCarouselState();
 }
 
-class _ImageCarouselState extends State<ImageCarousel> {
+class _BannerCarouselState extends State<BannerCarousel> {
   final ValueNotifier<int> _currentIndex = ValueNotifier(0);
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 return Container(
 
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    margin: EdgeInsets.symmetric(horizontal: 1.0),
                     decoration: BoxDecoration(
-                        color: Colors.amber,
+                        color: AppColors.primaryColor,
                         borderRadius: BorderRadius.circular(8)),
                     alignment: Alignment.center,
                     child: Text(
@@ -58,10 +58,10 @@ class _ImageCarouselState extends State<ImageCarousel> {
                     margin: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                         color:
-                            i == index ? AppColors.primaryColor : Colors.white,
+                            i == index ? AppColors.primaryColor : Colors.transparent,
                         border: Border.all(
                           color:
-                              i == index ? AppColors.primaryColor : Colors.grey,
+                              i == index ? AppColors.primaryColor : Colors.grey.shade400,
                         ),
                         borderRadius: BorderRadius.circular(30)),
                   ),

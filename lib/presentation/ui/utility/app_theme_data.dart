@@ -60,6 +60,11 @@ class AppThemeData{
           ),
           foregroundColor: Colors.white,
         ),
-      )
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.primaryColor
+        )
+      ),
   );
 }

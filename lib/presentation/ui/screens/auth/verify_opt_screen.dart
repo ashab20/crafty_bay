@@ -1,5 +1,5 @@
-import 'package:crafty_bay/presentation/ui/screens/complete_profile_screen.dart';
-import 'package:crafty_bay/presentation/ui/screens/verify_opt_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/auth/complete_profile_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/auth/verify_opt_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
