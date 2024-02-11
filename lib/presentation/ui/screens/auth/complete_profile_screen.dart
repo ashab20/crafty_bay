@@ -44,12 +44,14 @@ class CompleteProfileScreen extends StatelessWidget {
 
                       hintText: 'Mobile'
                   ),
-                ),TextFormField(
+                ),const SizedBox(height: 16,),
+                TextFormField(
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                       hintText: 'City'
                   ),
-                ),TextFormField(
+                ),const SizedBox(height: 16,),
+                TextFormField(
                   maxLines: 4,
                   textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(

@@ -1,3 +1,4 @@
+import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
@@ -6,6 +7,7 @@ import 'package:crafty_bay/presentation/ui/widgets/home/banner_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:crafty_bay/presentation/ui/widgets/selection_title.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
               SelectionTitle(title:"All Categories",onTapSeeAll: (){}),
               categoryList,
               const SizedBox(height: 8,),
-              SelectionTitle(title:"Populra",onTapSeeAll: (){}),
+              SelectionTitle(title:"Populra",onTapSeeAll: (){
+                Get.to(() => const ProductListScreen());
+              }),
               popularProductList,
               const SizedBox(height: 8,),
               SelectionTitle(title:"Special",onTapSeeAll: (){}),
