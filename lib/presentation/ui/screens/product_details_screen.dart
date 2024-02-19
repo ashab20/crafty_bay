@@ -3,6 +3,7 @@ import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dar
 import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/verify_email_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/product_review_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/color_selector.dart';
@@ -57,34 +58,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         title: const Text('Product Details'),
       ),
       body: GetBuilder<ProductDetailsController>(
-        builder: (productDetailsController) {
-          if (productDetailsController.inProgress) {
-            return const CenterCircularProgressIndicator();
-          }
-          return Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ProductImageCarousel(
-                        urls: [
-                          productDetailsController.productDetails.img1 ?? '',
-                          productDetailsController.productDetails.img2 ?? '',
-                          productDetailsController.productDetails.img3 ?? '',
-                          productDetailsController.productDetails.img4 ?? '',
-                        ],
-                      ),
-                      productDetailsBody(productDetailsController.productDetails),
-                    ],
-                  ),
+          builder: (productDetailsController) {
+        if (productDetailsController.inProgress) {
+          return const CenterCircularProgressIndicator();
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ProductImageCarousel(
+                      urls: [
+                        productDetailsController.productDetails.img1 ?? '',
+                        productDetailsController.productDetails.img2 ?? '',
+                        productDetailsController.productDetails.img3 ?? '',
+                        productDetailsController.productDetails.img4 ?? '',
+                      ],
+                    ),
+                    productDetailsBody(productDetailsController.productDetails),
+                  ],
                 ),
               ),
-              priceAndAddToCartSection
-            ],
-          );
-        }
-      ),
+            ),
+            priceAndAddToCartSection
+          ],
+        );
+      }),
     );
   }
 
@@ -99,7 +99,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Expanded(
                 child: Text(
                   productDetails.product?.title ?? '',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w600),
                 ),
               ),
               ValueListenableBuilder(
@@ -122,7 +123,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           const SizedBox(
             height: 8,
           ),
-          reviewAndRatingRow(productDetails.product?.star ?? 0),
+          if (productDetails.product != null)
+            reviewAndRatingRow(widget.productId ?? 0,
+                productDetails.product?.star ?? 0),
           const SizedBox(
             height: 16,
           ),
@@ -151,9 +154,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             height: 8,
           ),
           SizeSelector(
-              sizes: productDetails.size?.split(',') ?? [], onChange: (s) {
+              sizes: productDetails.size?.split(',') ?? [],
+              onChange: (s) {
                 _selectedSize = s;
-          }),
+              }),
           const SizedBox(
             height: 16,
           ),
@@ -176,7 +180,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Row reviewAndRatingRow(int rating) {
+  Row reviewAndRatingRow(int productId, int rating) {
     return Row(
       children: [
         Wrap(
@@ -202,12 +206,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         const SizedBox(
           width: 8,
         ),
-        const Text(
-          'Reviews',
-          style: TextStyle(
-              fontSize: 16,
-              color: AppColors.primaryColor,
-              fontWeight: FontWeight.w500),
+        TextButton(
+          onPressed: () {
+            if (productId != null) {
+              Get.to(() => ProductReviewScreen(productId: productId));
+            }
+          },
+          child: const Text(
+            'Reviews',
+            style: TextStyle(
+                fontSize: 16,
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.w500),
+          ),
         ),
         const SizedBox(
           width: 8,
@@ -262,15 +273,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           SizedBox(
             width: 100,
-            child: GetBuilder<AddToCartController>(
-              builder: (addToCartController) {
-                return Visibility(
-                  visible: addToCartController.inProgress == false,
-                  replacement: const CenterCircularProgressIndicator(),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_selectedColor != null && _selectedSize != null) {
-                        if (Get.find<AuthController>().isTokenNotNull) {
+            child:
+                GetBuilder<AddToCartController>(builder: (addToCartController) {
+              return Visibility(
+                visible: addToCartController.inProgress == false,
+                replacement: const CenterCircularProgressIndicator(),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_selectedColor != null && _selectedSize != null) {
+                      if (Get.find<AuthController>().isTokenNotNull) {
                         final stringColor = colorToString(_selectedColor!);
                         final response = await addToCartController.addToCart(
                             widget.productId,
@@ -291,21 +302,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ));
                         }
                       } else {
-                          Get.to(() => const VerifyEmailScreen());
-                        }
-                      } else {
-                        Get.showSnackbar(const GetSnackBar(
-                          title: 'Add to cart failed',
-                          message: 'Please select color and size',
-                          duration: Duration(seconds: 2),
-                        ));
+                        Get.to(() => const VerifyEmailScreen());
                       }
-                    },
-                    child: const Text('Add to Cart'),
-                  ),
-                );
-              }
-            ),
+                    } else {
+                      Get.showSnackbar(const GetSnackBar(
+                        title: 'Add to cart failed',
+                        message: 'Please select color and size',
+                        duration: Duration(seconds: 2),
+                      ));
+                    }
+                  },
+                  child: const Text('Add to Cart'),
+                ),
+              );
+            }),
           ),
         ],
       ),

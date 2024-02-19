@@ -55,7 +55,16 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                     if (value?.trim().isEmpty ?? true) {
                       return 'Enter your email';
                     }
-                    // TODO: Validate email with Regex
+
+                    // Email validation using a regular expression
+                    String emailPattern =
+                        r'^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$';
+                    RegExp regex = RegExp(emailPattern);
+
+                    if (!regex.hasMatch(value!)) {
+                      return 'Enter a valid email address';
+                    }
+
                     return null;
                   },
                 ),
