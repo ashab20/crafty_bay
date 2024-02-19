@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class CircleIconButton extends StatelessWidget {
   const CircleIconButton({
     super.key,
+    required this.onTap,
     required this.iconData,
-    required this.onTap
   });
 
-  final  VoidCallback onTap;
+  final VoidCallback onTap;
   final IconData iconData;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -17,11 +18,7 @@ class CircleIconButton extends StatelessWidget {
       child: CircleAvatar(
         radius: 15,
         backgroundColor: Colors.grey.shade300,
-        child: Icon(
-          iconData,
-          color: Colors.grey,
-          size: 20,
-        ),
+        child: Icon(iconData, color: Colors.grey, size: 20,),
       ),
     );
   }
