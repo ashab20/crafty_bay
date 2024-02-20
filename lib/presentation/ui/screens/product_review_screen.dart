@@ -1,6 +1,10 @@
+import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_review_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/create_review_controller.dart';
+import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
+import 'package:crafty_bay/presentation/ui/widgets/product_review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +21,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
   void initState() {
     super.initState();
     print(widget.productId);
-    Get.find<ProductReviewController>().getProductReview(widget.productId);
+    // Get.find<ProductReviewController>().getProductReview(widget.productId);
   }
 
   @override
@@ -45,12 +49,79 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               return Column(
                 children: [
                   Expanded(
-                    child: Text("Review"),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4, right: 4, top: 4),
+                      child: Visibility(
+                        visible: ProductReviewController.inProgress== false,
+                        replacement: const Center(
+                          child: Text('No Reviews'),
+                        ),
+                        child: ListView.builder(
+                          itemCount:
+                          ProductReviewController.productReviewModel?.reviewList?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return ProductReviewsCard(
+                              reviewData:
+                              ProductReviewController.productReviewModel.reviewList![index],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
+                  totalAndCreateReviewsSection(
+                      ProductReviewController.productReviewModel.reviewList?.length??0),
                 ],
               );
             }
         ),
+      ),
+    );
+  }
+
+  Container totalAndCreateReviewsSection(int totalReviews) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor.withOpacity(0.15),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Reviews (${totalReviews.toString()})',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey.shade700,
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              onPressed: () {
+                if (Get.find<AuthController>().isTokenNotNull == false) {
+                  AuthController.goToLogin();
+                  return;
+                }
+                Get.to(() => CreateReviewScreen(
+                  productId: widget.productId,
+                ));
+              },
+              child: const Icon(
+                Icons.add,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
