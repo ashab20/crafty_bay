@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 class ProductReviewScreen extends StatefulWidget {
   const ProductReviewScreen({super.key,required this.productId});
   final int productId;
+
   @override
   State<ProductReviewScreen> createState() => _ProductReviewScreenState();
 }
@@ -21,7 +22,9 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
   void initState() {
     super.initState();
     print(widget.productId);
-    // Get.find<ProductReviewController>().getProductReview(widget.productId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<ProductReviewController>().getProductReview(widget.productId);
+    });
   }
 
   @override
@@ -42,8 +45,8 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
           ),
         ),
         body: GetBuilder<ProductReviewController>(
-            builder: (ProductReviewController) {
-              if (ProductReviewController.inProgress == true) {
+            builder: (productReviewCtrl) {
+              if (productReviewCtrl.inProgress == true) {
                 return const CenterCircularProgressIndicator();
               }
               return Column(
@@ -52,25 +55,28 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 4, right: 4, top: 4),
                       child: Visibility(
-                        visible: ProductReviewController.inProgress== false,
+                        visible: productReviewCtrl.inProgress== false,
                         replacement: const Center(
                           child: Text('No Reviews'),
                         ),
                         child: ListView.builder(
-                          itemCount:
-                          ProductReviewController.productReviewModel?.reviewList?.length ?? 0,
+                          itemCount: productReviewCtrl.productReviewModel?.reviewList?.length ?? 0,
                           itemBuilder: (context, index) {
-                            return ProductReviewsCard(
-                              reviewData:
-                              ProductReviewController.productReviewModel.reviewList![index],
-                            );
+                            final reviewList = productReviewCtrl.productReviewModel?.reviewList;
+
+                            if (reviewList != null && index < reviewList.length) {
+                              return ProductReviewsCard(
+                                reviewData: reviewList[index],
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
                           },
-                        ),
-                      ),
+                        ),),
                     ),
                   ),
                   totalAndCreateReviewsSection(
-                      ProductReviewController.productReviewModel.reviewList?.length??0),
+                      productReviewCtrl.productReviewModel.reviewList?.length ?? 0),
                 ],
               );
             }
@@ -108,10 +114,10 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                 shape: const CircleBorder(),
               ),
               onPressed: () {
-                if (Get.find<AuthController>().isTokenNotNull == false) {
-                  AuthController.goToLogin();
-                  return;
-                }
+                // if (Get.find<AuthController>().isTokenNotNull == false) {
+                //   AuthController.goToLogin();
+                //   return;
+                // }
                 Get.to(() => CreateReviewScreen(
                   productId: widget.productId,
                 ));

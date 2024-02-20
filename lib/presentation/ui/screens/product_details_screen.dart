@@ -47,7 +47,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    print(AuthController.token);
     Get.find<ProductDetailsController>().getProductDetails(widget.productId);
   }
 
@@ -123,8 +122,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           const SizedBox(
             height: 8,
           ),
-          if (productDetails.product != null)
-            reviewAndRatingRow(widget.productId ?? 0,
+            reviewAndRatingRow(
                 productDetails.product?.star ?? 0),
           const SizedBox(
             height: 16,
@@ -180,7 +178,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Row reviewAndRatingRow(int productId, int rating) {
+  Row reviewAndRatingRow(int rating) {
     return Row(
       children: [
         Wrap(
@@ -208,9 +206,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         TextButton(
           onPressed: () {
-            if (productId != null) {
-              Get.to(() => ProductReviewScreen(productId: productId));
-            }
+              Get.to(() => ProductReviewScreen(productId: widget.productId));
           },
           child: const Text(
             'Reviews',

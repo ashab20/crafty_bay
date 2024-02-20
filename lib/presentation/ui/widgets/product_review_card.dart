@@ -8,7 +8,7 @@ class ProductReviewsCard extends StatefulWidget {
     required this.reviewData,
   });
 
-  final ProductReviewData reviewData;
+  final ProductReviewData? reviewData;
 
   @override
   State<ProductReviewsCard> createState() => _ProductReviewsCardState();
@@ -29,19 +29,19 @@ class _ProductReviewsCardState extends State<ProductReviewsCard> {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Colors.grey.shade200,
+                  backgroundColor: Colors.grey.shade100,
                   child: const Icon(Icons.person_outline),
                 ),
                 const SizedBox(
                   width: 8,
                 ),
                 Text(
-                  '${widget.reviewData.profile!.cusName}',
+                  '${widget.reviewData?.profile!.cusName}',
                   maxLines: 1,
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.grey.shade700,
-                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.w500,
                       overflow: TextOverflow.ellipsis),
                 ),
               ],
@@ -50,7 +50,7 @@ class _ProductReviewsCardState extends State<ProductReviewsCard> {
               height: 5,
             ),
             Text(
-              '${widget.reviewData.description}',
+              '${widget.reviewData?.description}',
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontSize: 14,

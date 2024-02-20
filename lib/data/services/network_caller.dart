@@ -16,9 +16,9 @@ class NetworkCaller {
         'Content-type' : 'application/json'
       },
     );
-    log(response.headers.toString());
+    // log(response.headers.toString());
     log(response.statusCode.toString());
-    log(response.body.toString());
+    // log(response.body.toString());
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
       if (decodedResponse['msg'] == 'success') {
