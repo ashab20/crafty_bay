@@ -1,4 +1,3 @@
-import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_review_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/create_review_controller.dart';

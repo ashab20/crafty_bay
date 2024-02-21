@@ -1,5 +1,6 @@
 import 'package:crafty_bay/data/models/product_details_data.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/add_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/verify_email_screen.dart';
@@ -219,15 +220,40 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         const SizedBox(
           width: 8,
         ),
-        Card(
-          color: AppColors.primaryColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          child: const Padding(
-            padding: EdgeInsets.all(4.0),
-            child: Icon(
-              Icons.favorite_outline_rounded,
-              size: 18,
-              color: Colors.white,
+        InkWell(
+          onTap: () async {
+            bool response = await Get.find<AddWishListController>()
+                .addToWishList(widget.productId);
+            if (response) {
+              Get.showSnackbar(const GetSnackBar(
+                title: 'Success',
+                message: 'This product has been added to cart',
+                duration: Duration(seconds: 2),
+                isDismissible: true,
+              ));
+            } else {
+              Get.showSnackbar(GetSnackBar(
+                title: 'Add to wishList failed',
+                message: Get.find<AddWishListController>().errorMessage,
+                duration: const Duration(seconds: 2),
+                isDismissible: true,
+                backgroundColor: Colors.red,
+              ));
+            }
+          },
+          borderRadius: BorderRadius.circular(6),
+          child: Card(
+            color: AppColors.primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.favorite_border_outlined,
+                size: 18,
+                color: Colors.white,
+              ),
             ),
           ),
         )
